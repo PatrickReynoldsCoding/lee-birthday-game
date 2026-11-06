@@ -573,7 +573,7 @@ addEventListener('keyup',e=>{const k=KEYMAP[e.key];if(k)setIn('k',k,0)});
 addEventListener('blur',()=>{for(const k in input.src.k)setIn('k',k,0)});
 function getDir(){if(input.last&&input.held[input.last])return input.last;for(const d of['up','down','left','right'])if(input.held[d])return d;return null}
 function gesture(){audioInit();if(isTouch&&!document.fullscreenElement&&G.mode==='title'){const el=document.documentElement;
-  const rf=el.requestFullscreen||el.webkitRequestFullscreen;if(rf){try{const pr=rf.call(el,{navigationUI:'hide'});if(pr&&pr.then)pr.then(()=>screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(()=>{})).catch(()=>{})}catch(e){}}}}
+  const rf=el.requestFullscreen||el.webkitRequestFullscreen;if(rf){try{const pr=rf.call(el,{navigationUI:'hide'});if(pr&&pr.then)pr.catch(()=>{})}catch(e){}}}}
 // d-pad
 (()=>{const pad=document.getElementById('pad');let id=null;const arms={up:'pU',down:'pD',left:'pL',right:'pR'};
   function upd(e){const r=pad.getBoundingClientRect();const dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);let d=null;
@@ -921,11 +921,15 @@ function render(){
 // =====================================================================
 //  Boot
 // =====================================================================
-function resize(){const vw=innerWidth,vh=innerHeight;const s=Math.min(vw/W,vh/H);const cw=Math.floor(W*s),ch=Math.floor(H*s);
-  cv.style.width=cw+'px';cv.style.height=ch+'px';cv.style.left=((vw-cw)/2|0)+'px';cv.style.top=((vh-ch)/2|0)+'px';
+function resize(){const vw=innerWidth,vh=innerHeight;const portrait=isTouch&&vh>vw;
+  const s=portrait?vw/W:Math.min(vw/W,vh/H);const cw=Math.floor(W*s),ch=Math.floor(H*s);
+  const top=portrait?Math.round(Math.min(vh*0.07,vh-ch-vw*0.5)):((vh-ch)/2|0);
+  cv.style.width=cw+'px';cv.style.height=ch+'px';cv.style.left=((vw-cw)/2|0)+'px';cv.style.top=Math.max(0,top)+'px';
   const dpr=window.devicePixelRatio||1;cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);out.imageSmoothingEnabled=false;
-  document.documentElement.style.setProperty('--pad',Math.round(Math.min(vh*0.36,vw*0.2,190))+'px');
-  document.getElementById('rotate').style.display=isTouch&&vh>vw?'flex':'none'}
+  const pad=portrait?Math.min(vw*0.42,(vh-top-ch)*0.7,230):Math.min(vh*0.36,vw*0.2,190);
+  document.documentElement.style.setProperty('--pad',Math.round(pad)+'px');
+  const bottom=portrait?Math.max(vh*0.05,(vh-Math.max(0,top)-ch-pad)/2)+'px':'';
+  for(const id of['pad','btns'])document.getElementById(id).style.bottom=bottom}
 addEventListener('resize',resize);addEventListener('orientationchange',()=>setTimeout(resize,200));resize();
 
 function boot(){
