@@ -138,7 +138,7 @@ y:'||#..#|#..#|#..#|#..#|.###|...#|.##.',z:'||####|...#|.##.|#...|####',
 '9':'.##.|#..#|#..#|.###|...#|...#|.##.',
 '.':'||||||#',',':'||||||#|#','!':'#|#|#|#|#||#','?':'.##.|#..#|...#|..#.|.#..||.#..',"'":'#|#','"':'#.#|#.#',
 '-':'|||###',':':'||#|||#','/':'...#|...#|..#.|.#..|.#..|#...|#...','(':'.#|#.|#.|#.|#.|#.|.#',')':'#.|.#|.#|.#|.#|.#|#.',
-'=':'||###||###','&':'.#..|#.#.|#.#.|.#..|#.##|#.#.|.#.#','+':'||.#.|###|.#.','♥':'.#.#.|#####|#####|.###.|..#..','*':'||#.#|.#.|#.#',
+'=':'||###||###','&':'.#..|#.#.|#.#.|.#..|#.##|#.#.|.#.#','+':'||.#.|###|.#.','ł':'.#.|.#.|.##|##.|.#.|.#.|.##','♥':'.#.#.|#####|#####|.###.|..#..','*':'||#.#|.#.|#.#',
 };
 const FONT={};
 for(const ch in FONT_SRC){const rows=FONT_SRC[ch].split('|');let w=0;rows.forEach(r=>{const i=r.lastIndexOf('#');if(i+1>w)w=i+1});FONT[ch]={rows,w}}
@@ -646,7 +646,7 @@ const SIGNS={'8,7':'MEOWVILLE GYM\nLeader: PADDY\n"Absolutely no cat fights."','
 async function toggleCar(){const P=G.player,S=G.follower;
   if(!G.inCar){if(tile(G.map,P.x,P.y)===','){await say('There\'s no room to park in the long grass.');return}
     sfx.engine();G.inCar=true;S.visible=false;
-    if(!G.carHint){G.carHint=1;await say('Lee hopped into her trusty 2008 KIA CEED!');await say('SHERLOCK sulks on the back seat.')}return}
+    if(!G.carHint){G.carHint=1;await say('Lee hopped into her trusty and definately silver 2008 KIA CEED!');await say('SHERLOCK sulks on the back seat.')}return}
   G.inCar=false;sfx.door();const[dx,dy]=DIRS[OPP[P.dir]];const bx=P.x+dx,by=P.y+dy;
   if(!blocked(bx,by)&&tile(G.map,bx,by)!=='D')place(S,bx,by,P.dir);else place(S,P.x,P.y,P.dir);S.visible=true}
 async function sherlockTalk(S){S.dir=OPP[G.player.dir];G.bubble={e:S,type:'fu',t:0};sfx.hiss();
@@ -666,7 +666,7 @@ async function intro(){
   await say('Today is LEE\'s birthday!');
   await say('...Huh? Someone left a cat carrier outside the flat.');
   await say('There\'s a note taped to it:');
-  await say('"Wszystkiego najlepszego, Lee! Please look after this one.\n- the Polish couple from Streatham"');
+  await say('"Kiełbasa pierogi, Lee! Please look after this one.\n- the Polish couple from Streatham"');
   await say('Lee opened the carrier...');
   carrier.visible=false;sfx.pop();G.pops.push({x:13*T+8,y:43*T+8,t:0});
   const S=G.sherlock;place(S,13,43,'up');S.visible=true;await wait(350);
@@ -694,7 +694,7 @@ const SPECIES={
     caught:'SPAGHETTI is already doing zoomies inside the carrier.',
     moves:[['ZOOMIES',2,4,'SPAGHETTI ran laps around SHERLOCK!'],['BOOP',1,2,'It was very friendly.'],['PLAY BITE',2,3]]},
   zuki:{name:'ZUKI',lv:9,hp:28,cat:true,catch:0.08,intro:['A wild ZUKI appeared!','ZUKI was out hunting. She looks totally unbothered.'],
-    caught:'ZUKI is acting like this was her plan all along.',
+    caught:'ZUKI is pissed and wanted to kill more pigeons',
     moves:[['POUNCE',3,5,'ZUKI is a natural hunter!'],['STALK',0,0,'ZUKI is watching... silently. So cool.'],['SWIPE',2,4]]},
   meeps:{name:'MEEPS',lv:8,hp:30,cat:true,catch:0.18,intro:['A wild MEEPS waddled out!','Her face markings look... alarmingly familiar.','MEEPS can smell the TREATS in Lee\'s bag.'],
     caught:'MEEPS is searching the carrier for snacks.',
@@ -744,7 +744,7 @@ async function sherlockMove(mv){const B=G.battle,sp=B.sp,N=sp.name;
   if(sp.cat&&B.ehp===1&&!B.tired){B.tired=true;await say(`${N} is worn out! Now's the time to use the CARRIER!`)}
   return null}
 async function useTreats(){const B=G.battle,k=B.key;
-  await say('Lee threw some TREATS!',{auto:350});
+  await say('Lee threw some CHIIICKAN TREATS!',{auto:350});
   if(k==='meeps'){B.fed=2;B.bonus+=0.5;await say('MEEPS is gobbling them up! MEEPS is totally distracted!')}
   else if(k==='spaghetti'){B.bonus+=0.25;await say('SPAGHETTI loves them! SPAGHETTI is even friendlier now!')}
   else if(k==='zuki')await say('ZUKI sniffed them and looked unimpressed. Too cool for treats.');
@@ -772,7 +772,7 @@ async function enemyTurn(){const B=G.battle,sp=B.sp;
   await lunge('e');sfx.hit();B.shp=Math.max(0,B.shp-Math.max(1,rnd(lo,hi)-B.atkDown));B.pBlink=0.5;
   await waitUntil(()=>B.shpS===B.shp&&B.pBlink<=0);
   if(txt)await say(txt);
-  if(B.shp<=0){await say('SHERLOCK fainted... out of pure spite.');await say('Lee scooped SHERLOCK up and hurried home.');return'faint'}
+  if(B.shp<=0){await say('SHERLOCK fainted... out of pure spite....what a cunt');await say('Lee scooped SHERLOCK up and hurried home.');return'faint'}
   return null}
 
 // =====================================================================
